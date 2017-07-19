@@ -16,8 +16,10 @@ Including another URLconf
 """
 from django.conf.urls import url
 from django.contrib import admin
+from django.views.decorators.csrf import csrf_exempt
+
 from data_collector.views import StatusView, AlertListView, NewAlertView, \
-    EditAlertView, DeleteAlertView
+    EditAlertView, DeleteAlertView, RecordDataApiView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -28,4 +30,5 @@ urlpatterns = [
         name='alerts-edit'),
     url(r'^alerts/(?P<pk>\d+)/delete/$', DeleteAlertView.as_view(),
         name='alerts-delete'),
+    url(r'^record/$', csrf_exempt(RecordDataApiView.as_view()), name='record-data'),
 ]

@@ -12,10 +12,18 @@
     table, th, td {
         border: 1px solid black;
     }
+
+    .has-alert{
+    color: red;
+    }
     </style>
 </head>
 
 <body>
+<ul>
+    <li><a href="{% url 'status' %}">Home</a></li>
+    <li><a href="{% url 'alerts-list' %}">Alerts</a></li>
+</ul>
     {% block content %}
     {% endblock %}
 </body>

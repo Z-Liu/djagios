@@ -1,3 +1,6 @@
+from django.forms import modelform_factory
+from django.http import HttpResponseForbidden, HttpResponse, HttpResponseBadRequest
+from django.views.generic import View
 from django.views.generic import TemplateView, ListView, UpdateView, \
     CreateView, DeleteView
 from data_collector.models import DataPoint, Alert
@@ -68,3 +71,16 @@ class DeleteAlertView(DeleteView):
 
     def get_success_url(self):
         return reverse('alerts-list')
+
+
+class RecordDataApiView(View):
+    def post(self, request, *args, **kwargs):
+        if request.META.get('HTTP_AUTH_SECRET') != 'supersecretkey':
+            return HttpResponseForbidden('Auth key incorrect')
+        form_class = modelform_factory(DataPoint, fields=['node_name', 'data_type', 'data_value'])
+        form = form_class(request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponse()
+        else:
+            return HttpResponseBadRequest()
